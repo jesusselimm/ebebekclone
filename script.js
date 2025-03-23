@@ -1,4 +1,3 @@
-// Sayfa kontrolü
 if (!window.location.pathname.endsWith('index.html') && window.location.pathname !== '/') {
     console.log('wrong page');
     throw new Error('Bu sayfa ana sayfada çalışmalıdır.');
@@ -13,7 +12,6 @@ class ProductCarousel {
     }
 
     addMaterialIcons() {
-        // Material Icons
         if (!document.querySelector('link[href*="Material+Icons"]')) {
             const link = document.createElement('link');
             link.href = 'https://fonts.googleapis.com/icon?family=Material+Icons';
@@ -21,7 +19,6 @@ class ProductCarousel {
             document.head.appendChild(link);
         }
 
-        // Quicksand Font
         if (!document.querySelector('link[href*="Quicksand"]')) {
             const fontLink = document.createElement('link');
             fontLink.href = 'https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap';
@@ -556,7 +553,6 @@ class BannerCarousel {
     }
 
     addMaterialIcons() {
-        // Material Icons
         if (!document.querySelector('link[href*="Material+Icons"]')) {
             const link = document.createElement('link');
             link.href = 'https://fonts.googleapis.com/icon?family=Material+Icons';
@@ -564,7 +560,6 @@ class BannerCarousel {
             document.head.appendChild(link);
         }
 
-        // Quicksand Font
         if (!document.querySelector('link[href*="Quicksand"]')) {
             const fontLink = document.createElement('link');
             fontLink.href = 'https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap';
@@ -1170,7 +1165,6 @@ class BannerCarousel {
     }
 
     async createHTML() {
-        // Üst bar
         const topBar = document.createElement('div');
         topBar.className = 'top-bar';
         topBar.innerHTML = `
@@ -1202,7 +1196,6 @@ class BannerCarousel {
         `;
         document.body.insertBefore(topBar, document.body.firstChild);
 
-        // Üst menü
         const topNav = document.createElement('div');
         topNav.className = 'top-nav';
         topNav.innerHTML = `
@@ -1238,7 +1231,6 @@ class BannerCarousel {
         `;
         document.body.insertBefore(topNav, document.body.children[1]);
 
-        // Ana header ve nav
         const header = document.createElement('header');
         header.className = 'header';
         header.innerHTML = `
@@ -1271,7 +1263,6 @@ class BannerCarousel {
         `;
         document.body.insertBefore(header, document.body.children[2]);
 
-        // Banner container
         const bannerContainer = document.createElement('div');
         bannerContainer.className = 'banner-container';
         bannerContainer.innerHTML = `
@@ -1290,16 +1281,13 @@ class BannerCarousel {
         `;
         document.body.insertBefore(bannerContainer, document.body.children[3]);
 
-        // URL'den aktif kategoriyi al
         const urlParams = new URLSearchParams(window.location.search);
         const activeCategory = urlParams.get('category') || 'BEBEK_MODASI';
 
-        // Aktif kategoriyi işaretle
         const navItems = header.querySelectorAll('.nav-item');
         navItems.forEach(item => {
             if (item.dataset.category === activeCategory) {
                 item.classList.add('active');
-                // Aktif başlık stillerini uygula
                 item.style.background = '#fff6f0';
                 item.style.color = '#ff6b00';
                 item.style.borderRadius = '30px';
@@ -1309,10 +1297,9 @@ class BannerCarousel {
                 item.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
             }
 
-            // Tıklama olaylarını ekle
             item.addEventListener('click', (e) => {
                 e.preventDefault();
-                // Tüm active sınıflarını ve stilleri kaldır
+
                 navItems.forEach(navItem => {
                     navItem.classList.remove('active');
                     navItem.style.background = '';
@@ -1323,7 +1310,6 @@ class BannerCarousel {
                     navItem.style.fontWeight = '';
                     navItem.style.boxShadow = '';
                 });
-                // Tıklanan öğeye active sınıfı ve stilleri ekle
                 item.classList.add('active');
                 item.style.background = '#fff6f0';
                 item.style.color = '#ff6b00';
@@ -1332,7 +1318,6 @@ class BannerCarousel {
                 item.style.padding = '10px 25px';
                 item.style.fontWeight = '600';
                 item.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-                // URL'yi güncelle
                 const newUrl = new URL(window.location.href);
                 newUrl.searchParams.set('category', item.dataset.category);
                 window.history.pushState({}, '', newUrl);
@@ -1348,10 +1333,8 @@ class BannerCarousel {
             const response = await fetch('https://gist.githubusercontent.com/sevindi/8bcbde9f02c1d4abe112809c974e1f49/raw/9bf93b58df623a9b16f1db721cd0a7a539296cf0/products.json');
             const products = await response.json();
             
-            // İndirimli ürünleri filtrele
             const discountedProducts = products.filter(product => product.price !== product.original_price);
             
-            // İndirimli ürünlerden banner'ları oluştur
             this.banners = discountedProducts.map(product => {
                 const discount = Math.round(((product.original_price - product.price) / product.original_price) * 100);
                 return {
@@ -1364,15 +1347,12 @@ class BannerCarousel {
                 };
             });
 
-            // İlk indirimli ürünün kategorisini bul ve navbar'ı güncelle
             if (this.banners.length > 0) {
                 const activeCategory = this.banners[0].category;
                 const navItems = document.querySelectorAll('.nav-item');
                 
-                // Tüm active sınıflarını kaldır
                 navItems.forEach(item => {
                     item.classList.remove('active');
-                    // OYUNCAK başlığının stillerini kaldır
                     if (item.dataset.category === 'OYUNCAK') {
                         item.style.background = '';
                         item.style.color = '';
@@ -1384,11 +1364,9 @@ class BannerCarousel {
                     }
                 });
 
-                // İlgili kategoriye active sınıfını ekle ve OYUNCAK stillerini uygula
                 navItems.forEach(item => {
                     if (item.dataset.category === activeCategory) {
                         item.classList.add('active');
-                        // OYUNCAK başlığının stillerini uygula
                         item.style.background = '#fff6f0';
                         item.style.color = '#ff6b00';
                         item.style.borderRadius = '30px';
@@ -1399,7 +1377,6 @@ class BannerCarousel {
                     }
                 });
 
-                // URL'yi güncelle
                 const newUrl = new URL(window.location.href);
                 newUrl.searchParams.set('category', activeCategory);
                 window.history.pushState({}, '', newUrl);
@@ -1454,10 +1431,8 @@ class BannerCarousel {
             </div>
         `).join('');
 
-        // Navbar'ı güncelle
         const navItems = document.querySelectorAll('.nav-item');
         
-        // Önce tüm active sınıflarını kaldır
         navItems.forEach(item => {
             item.classList.remove('active');
             item.style.background = '';
@@ -1469,7 +1444,6 @@ class BannerCarousel {
             item.style.boxShadow = '';
         });
 
-        // BEBEK_MODASI başlığını aktif yap
         navItems.forEach(item => {
             if (item.dataset.category === 'BEBEK_MODASI') {
                 item.classList.add('active');
@@ -1495,10 +1469,8 @@ class BannerCarousel {
         this.prevButton.addEventListener('click', () => this.navigate('prev'));
         this.nextButton.addEventListener('click', () => this.navigate('next'));
         
-        // Otomatik geçiş için interval
         this.autoPlayInterval = setInterval(() => this.navigate('next'), 5000);
         
-        // Mouse hover olduğunda otomatik geçişi durdur
         const carousel = document.querySelector('.banner-carousel');
         carousel.addEventListener('mouseenter', () => clearInterval(this.autoPlayInterval));
         carousel.addEventListener('mouseleave', () => {
@@ -1518,7 +1490,6 @@ class BannerCarousel {
         
         this.carouselWrapper.style.transform = `translateX(-${this.currentSlide * 100}%)`;
         
-        // Thumbnail'ları güncelle
         thumbnails.forEach((thumb, index) => {
             if (index === this.currentSlide) {
                 thumb.classList.add('active');
@@ -1545,7 +1516,6 @@ class BannerCarousel {
     }
 }
 
-// Carousel'leri başlat
 document.addEventListener('DOMContentLoaded', () => {
     new BannerCarousel();
     new ProductCarousel();
